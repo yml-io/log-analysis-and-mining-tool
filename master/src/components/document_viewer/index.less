@@ -1,0 +1,59 @@
+.black-placeholder {
+    background-color: rgb(0,36,81);
+    color: white;
+    height: 100%;
+}
+.document-viewer {
+    background-color: rgb(0,23,51);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    
+    .pin-tab {        
+        .pin-tab-icon {
+            font-size: 15px;
+        }
+        .pin-tab-text {
+            font-size: 15px;
+        }
+        .pin-tab-closebtn {
+            font-size: 15px;
+            display: inline-block;  /////////// 行内元素有高度,块级元素没高度
+        }
+        .pin-tab-closebtn:hover {
+            background-color: rgba(255,255,255,.5);
+        }
+        span {
+            margin-left: 5px;;
+            vertical-align: middle;  ///////////  基线对齐
+            line-height: 0px;     //////  配合使用
+        }
+    }
+    .editor-panel {
+        font-size: 10px;;
+        background-color: rgb(0,36,81);
+        flex: 1 1 auto;
+        overflow-y: auto;
+        height: 0;
+        
+
+        .diagram-track {
+            flex: 1;
+            
+        }
+        .diagram-track:hover {
+            background-color: rgba(255,255,255,.15);
+        }
+
+        .diagram-track-group {
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+        }
+
+        .diagram-text-line {
+            min-width: 100%;
+        }
+    }
+}

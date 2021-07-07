@@ -1,0 +1,36 @@
+.status-bar {
+    background:rgb(50, 50, 70);
+    border-top: solid 1px black;
+    .groups-wrapper {
+        list-style: none;
+        padding: 5px 10px 5px 0;
+        overflow: hidden;
+        .button-group {
+            font-size: 12px;
+            color: whitesmoke;
+            font-weight: unset;
+            // border-left: solid 2px darkgray;
+            cursor: pointer;
+            list-style: none;
+            overflow: hidden;
+            display: inline-block;
+        }
+        li {
+            margin: 0 10px;
+            float: left;
+            padding: 2px;
+        }
+        li:hover {
+            background-color: rgba(255,255,255,.3);
+        }
+        .docker-left {
+            float: left;
+        }
+        .docker-right {
+            float: right;
+        }
+    }
+
+    box-shadow: 5px 5px 5px #888888;
+    position: relative;
+}

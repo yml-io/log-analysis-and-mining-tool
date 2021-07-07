@@ -1,0 +1,41 @@
+.main-page {
+    margin: auto auto;
+    width: 100%;
+    height: calc(100vh);;
+    background: bisque;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: baseline;
+    // padding: 10px 0 0 20px;
+    .panel-top {
+        width: 100%;
+        min-width: 500px; // hard code width
+        z-index: 99;
+        flex: 0;
+    }
+    .panel-center {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: stretch;
+
+        .dock-left {
+            flex: 0;
+            width: 380px; // hard code width
+            background: red;
+        }
+        .dock-right {
+            flex: 1;
+            background: green;
+        }
+        flex: 1;
+    }
+    .panel-bottom {
+        width: 100%;
+        flex: 0;
+    }
+}
