@@ -8,14 +8,17 @@ import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import TreeNodeContextMenu from '@/components/directory_tree/tree_node_context_menu';
+import TreeNodeContextMenu from '@/components/tree_node_context_menu';
+import NodePropertiesDialog from '@/components/dialog/node_properties_dialog';
 
 import { useDispatch, useSelector } from "react-redux";
-import { selectTreeData, switchSelectNodeById } from "@/features/node_tree";
+import { selectTreeData, selectCurrentId, switchSelectNodeById, setNodeTreeContextMenu, } from "@/features/node_tree";
 
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import MailIcon from "@material-ui/icons/Mail";
+import { selectShowPropertiesDilog, selectContextMenu } from "../../features/node_tree";
+
 
 
 const useTreeItemStyles = makeStyles((theme) => ({
@@ -76,29 +79,22 @@ const useTreeItemStyles = makeStyles((theme) => ({
 }));
 
 function StyledTreeItem(props) {
-
-   // context menu holded in tree item
-  const initialState = {
-    mouseX: null,
-    mouseY: null,
-  };
-  const [menuPosition, setMenuPosition] = React.useState(initialState);
+  const classes = useTreeItemStyles();
+  const { nodeDataId, labelText, labelIcon: LabelIcon, labelInfo, color, bgColor, ...other } = props;
+  const dispatch = useDispatch();
   const handleRightClick = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    console.log(event.target);
-    setMenuPosition({
+    console.log(event);
+    const rightClickNodeText = event.target.dataset.nodeId;
+    dispatch(switchSelectNodeById(rightClickNodeText));
+    dispatch(setNodeTreeContextMenu({
+      show: true,
       mouseX: event.clientX - 2,
       mouseY: event.clientY - 4,
-    });
+    }));
   };
-  const handleClose = () => {
-    setMenuPosition(initialState);
-  };
-
-  const classes = useTreeItemStyles();
-  const { labelText, labelIcon: LabelIcon, labelInfo, color, bgColor, ...other } = props;
-
+  
   return (<div className="directory-tree-node">
     <TreeItem
     onContextMenu={handleRightClick} 
@@ -107,7 +103,7 @@ function StyledTreeItem(props) {
         <div className={classes.labelRoot}>
           <LabelIcon color="inherit" className={classes.labelIcon} />
           <Typography variant="body2" className={classes.labelText}>
-            <span style={{color: color, backgroundColor: bgColor}}>{labelText}</span>
+            <span style={{color: color, backgroundColor: bgColor}} data-node-id={nodeDataId}>{labelText}</span>
           </Typography>
           <Typography variant="caption" className={classes.labelInfo} color="inherit" >
             {labelInfo}
@@ -128,7 +124,7 @@ function StyledTreeItem(props) {
       }}
       {...other}
     />
-    <TreeNodeContextMenu handlerCallback={handleClose} mouseX={menuPosition.mouseX} mouseY={menuPosition.mouseY}/>
+    
     </div>
   );
 }
@@ -152,12 +148,23 @@ const StyledTreeView = withStyles({
 
 function DirectoryTree() {
   const treeData = useSelector(selectTreeData);
+  const currentSelectedNodeId = useSelector(selectCurrentId);
   const dispatch = useDispatch();
+  const contextMenu = useSelector(selectContextMenu);
+  const showPropertiesDialog = useSelector(selectShowPropertiesDilog);
+  const handleContextMenuClose = () => {
+    console.log("call back from context menu");
+  };
+  const handlePropertiesDialogClose = () => {
+    console.log("call back from context menu");
+  };
+
 
   const renderTree = (nodes) => {
      return <StyledTreeItem 
           key={nodes.id} 
           nodeId={nodes.id} 
+          nodeDataId={nodes.id+""}
           // label={nodes.labelText} bug!
           labelText={nodes.labelText}
           labelIcon={MailIcon}
@@ -171,15 +178,19 @@ function DirectoryTree() {
   return (
     <div className="directory-tree">
       <StyledTreeView
-        defaultExpanded={["root"]}
-        defaultSelected={["root"]}
+        defaultExpanded={[currentSelectedNodeId]}
+        defaultSelected={[currentSelectedNodeId]}
+        selected={currentSelectedNodeId}
         onNodeSelect={(event, nodeId)=>dispatch(switchSelectNodeById(nodeId))}
         defaultCollapseIcon={<ArrowDropDownIcon />}
         defaultExpandIcon={<ArrowRightIcon />}
-        defaultEndIcon={<div style={{ width: 24 }} />}
+        defaultEndIcon={<div style={{ width: 54 }} />}
       >
       {treeContent}
       </StyledTreeView>
+
+      {(contextMenu.show)?<TreeNodeContextMenu handlerCallback={handleContextMenuClose} />:null}
+      {(showPropertiesDialog)?<NodePropertiesDialog isOpenDialig={showPropertiesDialog} handleCloseCallback={handlePropertiesDialogClose} />:null}
     </div>
   );
 }

@@ -2,6 +2,10 @@ import React from 'react';
 import {PropTypes}  from 'prop-types';
 import './index.less';
 import { withStyles, makeStyles } from '@material-ui/core';
+
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentNode, setShowPropertiesDilog, updateNodeDataObject } from "@/features/node_tree";
+
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -125,13 +129,16 @@ const StyledList = withStyles((theme) => ({
 // };
 
 export default function NodePropertiesDialog(props) {
-    const { isOpenDialig, handleCloseCallback, nodeInfo, ...other } = props;
-    const [nodeLabelText, setNodeLabelText] = React.useState(nodeInfo && nodeInfo.labelText || "");
-    const [nodeType, setNodeType] = React.useState(nodeInfo && nodeInfo.nodeType || "Text File");
-    const [nodeDetailType, setNodeDetailType] = React.useState(nodeInfo && nodeInfo.nodeDetailType || "Time Series");
-    const [checkedPlugin, setCheckedPlugin] = React.useState(nodeInfo && nodeInfo.checkedPlugin || []);
+    const { isOpenDialig, handleCloseCallback, ...other } = props;
+    const currentTreeNode = useSelector(selectCurrentNode);
+    const dispatch = useDispatch();
 
-    console.log(nodeLabelText);
+    // sue multi field to store form data, divide busniess point
+    const [nodeLabelText, setNodeLabelText] = React.useState(currentTreeNode.labelText || "");
+    const [nodeType, setNodeType] = React.useState(currentTreeNode.nodeType || "Text File");
+    const [nodeDetailType, setNodeDetailType] = React.useState(currentTreeNode.nodeDetailType || "Time Series");
+    const [checkedPlugin, setCheckedPlugin] = React.useState(currentTreeNode.checkedPlugin || []);
+
     // const radioGroupRef = React.useRef(null);
 
     // React.useEffect(() => {
@@ -159,10 +166,13 @@ export default function NodePropertiesDialog(props) {
         nodeDetailType: nodeDetailType,
         checkedPlugin: checkedPlugin,
       };
+      dispatch(updateNodeDataObject(newProperties));
+      dispatch(setShowPropertiesDilog(false));
       handleCloseCallback(newProperties);
     };
     const onClickCancel = (event) => {
       console.log('force close window');
+      dispatch(setShowPropertiesDilog(false));
       handleCloseCallback(null);
     };
     
@@ -286,7 +296,6 @@ export default function NodePropertiesDialog(props) {
                 }
               </StyledList>
             </Paper>) : null}
-
 
             </StyledDialogContent>
             <StyledDialogActions>

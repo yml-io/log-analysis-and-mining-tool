@@ -98,6 +98,7 @@ function ActivityBar(props){
                 // label={activityItem.description} 
                 aria-label={activityItem.title} 
                 key={_ind} 
+                disableRipple
                 {...a11yProps(_ind)} />
             })
         }

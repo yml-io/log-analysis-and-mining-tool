@@ -13,9 +13,12 @@ import {
     removeNodeTree,
     updateNodeDataObject,
     selectCurrentNode,
+    selectContextMenu,
+    setShowPropertiesDilog,
 } from '@/features/node_tree';
 import { useDispatch, useSelector } from "react-redux";
 import NodePropertiesDialog from '@/components/dialog/node_properties_dialog';
+import { setNodeTreeContextMenu, } from "@/features/node_tree";
 
 const StyledMenu = withStyles({
     paper: {
@@ -32,10 +35,11 @@ const StyledMenuItem = withStyles({
 
 
 export default function TreeNodeContextMenu(props) {
-    const {mouseX, mouseY, handlerCallback} = props;
-    const [showPropDialog, setShowPropDialog] = useState(false);
+    const { handlerCallback } = props;
+    // const [showPropDialog, setShowPropDialog] = useState(false);
     const dispatch = useDispatch();
-    let currentSelectedNode = useSelector(selectCurrentNode);
+    const currentSelectedNode = useSelector(selectCurrentNode);
+    const contextMenu = useSelector(selectContextMenu);
 
     const onCloseCallback = (saveData) => {
         if (saveData) {
@@ -48,17 +52,25 @@ export default function TreeNodeContextMenu(props) {
             };
             dispatch(updateNodeDataObject(updateObject));
         }
-        setShowPropDialog(false);
+        // close self
+        dispatch(setNodeTreeContextMenu({
+            show: false,
+            mouseX: null,
+            mouseY: null,
+        }));
     };
     return (<div className="node-context-menu">
         <StyledMenu
-        // keepMounted
-        open={mouseY !== null}
+        // keepMounted  contextMenuPosition.mouseX !== null && montextMenuPosition.mouseY !== null
+        onClick={()=>{
+            dispatch(setNodeTreeContextMenu({show:false}))
+        }}
+        open={ contextMenu.show }
         onClose={handlerCallback}
         anchorReference="anchorPosition"
         anchorPosition={
-            mouseY !== null && mouseX !== null
-            ? { top: mouseY, left: mouseX }
+            contextMenu.mouseY !== null && contextMenu.mouseX !== null
+            ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
             : undefined
         }
         >
@@ -68,9 +80,8 @@ export default function TreeNodeContextMenu(props) {
         <StyledMenuItem onClick={handlerCallback}>Build Node</StyledMenuItem>
         <StyledMenuItem onClick={() => {dispatch(removeNodeTree()); handlerCallback();}}>Delete</StyledMenuItem>
         <StyledMenuItem onClick={() => {dispatch(updateNodeDataObject({bgColor: "rgba(250, 250, 50, .5)"})); handlerCallback();}}>Highlight</StyledMenuItem>
-        <StyledMenuItem onClick={() => {setShowPropDialog(true); handlerCallback()}}>Properties</StyledMenuItem>
+        <StyledMenuItem onClick={() => {dispatch(setShowPropertiesDilog(true)); handlerCallback()}}>Properties</StyledMenuItem>
         </StyledMenu>
-        {/* this will mounted this component when the context menu not closed */}
-        <NodePropertiesDialog isOpenDialig={showPropDialog} handleCloseCallback={onCloseCallback} nodeInfo={currentSelectedNode} />
+
     </div>);
 }
