@@ -1,22 +1,13 @@
 import Cors from 'cors'
-import initMiddleware from '../../../lib/init-middleware'
+import initMiddleware from '../../../lib/init_middleware'
 import formidable from "formidable";
 import fs from "fs";
-import {createUploadFileName} from '../../../lib/util';
+import {createUploadFileName, saveUploadedFile} from '../../../lib/uploadUtil';
 
 export const config = {
     api: {
       bodyParser: false
     }
-};
-
-const saveFile = async (file) => {
-    const data = fs.readFileSync(file.path);
-    const savedFileName = createUploadFileName(file.name);
-    const uploadFullPath = `./upload/${savedFileName}`;
-    fs.writeFileSync(uploadFullPath, data);
-    await fs.unlinkSync(file.path);
-    return savedFileName;
 };
 
 // Initialize the cors middleware
@@ -36,8 +27,10 @@ export default async function handler(req, res) {
 
   const form = new formidable.IncomingForm();
   await form.parse(req, async function (err, fields, files) {
-    await saveFile(files.file)
+    const uploadedFile = files.file;
+    const savedFileName = createUploadFileName(uploadedFile.name);
+    await saveUploadedFile(uploadedFile, savedFileName)
     .then(savedFileName => res.status(201).json({status: 0, data: {resourceName: savedFileName}}))
-    .catch(ioe => res.status(500).json({status: 1, error: {message: "save file error"}}));
+    // .catch(ioe => res.status(500).json({status: 1, error: {message: "save file error"}}));
   });
 }

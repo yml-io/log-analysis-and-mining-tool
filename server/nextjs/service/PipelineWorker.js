@@ -1,17 +1,28 @@
-const { once } = require('events');
-const { createInterface } = require('readline');
+import { once } from 'events';
+import { createInterface } from 'readline';
+import { loadCachedMiddleware, createComposeMiddleware,  } from '../lib/plugin-compose';
+
 
 class PipelineWorker {
     constructor(_nodeTree, _buildProfile) {
         this.nodeTree = _nodeTree;
         this.buildProfile = _buildProfile;
+        // create compose plugin handler chain
+        const cachedMiddleware = loadCachedMiddleware();
+        const composedMiddleware = createComposeMiddleware(
+            cachedMiddleware, 
+            ["acabula-middleware-chunkify", 
+            "acabula-middleware-genelizer", 
+            "acabula-middleware-syntax-highlight"]);
+        this.composedPlugin = composedMiddleware;
     }
+    
     async applyPluginPipeline(resource, checkedPlugin) {
         // checkedPlugin shoud be a list of object with user option parameters
         
         const ordinaryPluginList = checkedPlugin.sort();
         // make compose plugin chain
-        const composedPlugin = (v) => {return v.slice(0, 100)};
+        // const composedPlugin = (v) => {return v.slice(0, 100)};
         const result = [];
         await (async function(fn) {
             try {
@@ -21,8 +32,9 @@ class PipelineWorker {
                 });
     
                 rl.on('line', (line) => {
-                    const tmp = composedPlugin(line);
-                    result.push(tmp);
+                    const context = {data: line};
+                    fn(context);
+                    result.push(context.data);
                 });
     
                 await once(rl, 'close');
@@ -31,7 +43,7 @@ class PipelineWorker {
             } catch (err) {
                 console.error(err);
             }
-        })(composedPlugin);
+        })(this.composedPlugin);
         return result;
     }
 }

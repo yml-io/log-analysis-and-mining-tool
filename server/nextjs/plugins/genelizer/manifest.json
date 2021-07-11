@@ -1,0 +1,34 @@
+{
+    "type": "middleware",
+    "name": "genelizer",
+    "id": "acabula-middleware-genelizer",
+  
+    "info": {
+      "description": "genelizer middleware for Acabula",
+      "author": {
+        "name": "Acabula Labs",
+        "url": "http://github.com/yumingle"
+      },
+      "keywords": ["genelizer", "middleware"],
+      "logos": {
+        "small": "img/genelizer_logo_small.svg",
+        "large": "img/genelizer_logo_large.svg"
+      },
+      "links": [
+        { "name": "Project site", "url": "https://github.com/yumingle/genelizer" },
+        { "name": "Blog Post", "url": "" },
+        { "name": "MIT License", "url": "https://github.com/yumingle/genelizer/blob/master/LICENSE" }
+      ],
+      "screenshots": [
+        { "name": "Donut!", "path": "img/genelizer-donut.png" },
+        { "name": "genelizer options", "path": "img/genelizer-options.png" }
+      ],
+      "version": "%VERSION%",
+      "updated": "%TODAY%"
+    },
+  
+    "dependencies": {
+      "acabulaVersion": "4.6",
+      "plugins": []
+    }
+  }

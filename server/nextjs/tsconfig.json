@@ -22,7 +22,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "plugins/genelizer/module.js", "plugins/syntax_highlight/module.js"  ],
   "exclude": [
     "node_modules"
   ]

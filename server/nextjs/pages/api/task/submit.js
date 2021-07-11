@@ -1,5 +1,5 @@
 import Cors from 'cors'
-import initMiddleware from '../../../lib/init-middleware'
+import initMiddleware from '../../../lib/init_middleware'
 import TaskRunner from '../../../service/TaskRunner';
 
 const cors = initMiddleware(

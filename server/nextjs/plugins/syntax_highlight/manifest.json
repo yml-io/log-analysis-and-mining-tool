@@ -1,0 +1,34 @@
+{
+    "type": "middleware",
+    "name": "syntax_highlight",
+    "id": "acabula-middleware-syntax-highlight",
+  
+    "info": {
+      "description": "syntax-highlight middleware for Acabula",
+      "author": {
+        "name": "Acabula Labs",
+        "url": "http://github.com/yumingle"
+      },
+      "keywords": ["syntax highlight", "middleware"],
+      "logos": {
+        "small": "img/syntax_highlight_logo_small.svg",
+        "large": "img/syntax_highlight_logo_large.svg"
+      },
+      "links": [
+        { "name": "Project site", "url": "https://github.com/yumingle/syntax_highlight" },
+        { "name": "Blog Post", "url": "" },
+        { "name": "MIT License", "url": "https://github.com/yumingle/syntax_highlight/blob/master/LICENSE" }
+      ],
+      "screenshots": [
+        { "name": "Donut!", "path": "img/syntax-highlight-donut.png" },
+        { "name": "syntax highlight options", "path": "img/syntax-highlight-options.png" }
+      ],
+      "version": "%VERSION%",
+      "updated": "%TODAY%"
+    },
+  
+    "dependencies": {
+      "acabulaVersion": "4.6",
+      "plugins": []
+    }
+  }

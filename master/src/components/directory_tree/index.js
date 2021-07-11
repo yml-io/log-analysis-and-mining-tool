@@ -87,6 +87,7 @@ function StyledTreeItem(props) {
     event.stopPropagation();
     console.log(event);
     const rightClickNodeText = event.target.dataset.nodeId;
+    
     dispatch(switchSelectNodeById(rightClickNodeText));
     dispatch(setNodeTreeContextMenu({
       show: true,

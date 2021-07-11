@@ -130,7 +130,9 @@ export const NodeTreeSlice = createSlice({
             }
         },
         switchSelectNodeById: (state, action) => {
-            state.currentId = action.payload;
+            if (action.payload) {
+                state.currentId = action.payload;
+            }
         },
         appendNode: (state, action) => {
             const newNodeInfo = {

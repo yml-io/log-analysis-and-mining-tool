@@ -23,6 +23,7 @@ class TaskRunner {
             // const mergedResourceFlow = await this.flowMixer.mergedMultiFlow(compareGroup);
             return {id, labelText, compareGroup};
         }
+        // this is a data node
         let result = {};
         if (resourceName) {
             // read resource
@@ -30,16 +31,15 @@ class TaskRunner {
             
             // apply plugin according to user selected
             const applyedPluginResource = await this.pipelineWorker.applyPluginPipeline(resource, checkedPlugin);
-            result = ({fragments: applyedPluginResource, id, labelText});
+            result = {fragments: applyedPluginResource, id, labelText};
         } else {
-            result = ({id, labelText});
+            result = {id, labelText};
         }
         return result;
     }
 
     async run() {
         const result = await this.createResourceFlow(this.nodeTree);
-        console.log(typeof result);
         return result;
     }
 }
