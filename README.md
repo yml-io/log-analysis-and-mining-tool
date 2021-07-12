@@ -1,4 +1,4 @@
-# 简介
+# 简介
 仿 VScode 界面的日志挖掘工具。提供将混合的多个结构化序列数据转化成并行事件序列的流程图结构。
 基于 React, reduxjs 1.6.0, material-ui, next.js 10.0.0.
 
@@ -47,3 +47,4 @@ module.html 引用的 JS 文件。可以实现一些网页元素控件的交互�
 2. genelizer:  可以将原始数据转换为词法上更泛化的数据。以便于之后处理。例如文本区块化依赖此插件。
 3. syntax highlight: 语法高亮组件。
 
+# Introduce to Node Tree 
