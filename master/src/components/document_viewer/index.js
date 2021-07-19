@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
 import {addBlankDocument, addDocument, removeDocument, changeActivedInd} from '@/features/document_set';
-
+import ScheduleIcon from '@material-ui/icons/Schedule';
 import CloseIcon from '@material-ui/icons/Close';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -109,13 +109,72 @@ const StyledTab = withStyles((theme) => ({
 const renderDiagram = (nodeDiagram) => {
   const {id, labelText, compareGroup, fragments} = nodeDiagram;
 
+  const renderIndicator = (name, value) => {
+    let classAnotation = "";
+    if (name=="ERROR") classAnotation = "indicator-error";
+    if (name=="WARN") classAnotation = "indicator-warn";
+    if (name=="INFO") classAnotation = "indicator-info";
+    if (name=="DEBUG") classAnotation = "indicator-debug";
+    
+
+    return <li className={`stat-item`}>
+      <span className={`indicator-avatar ${classAnotation}`}></span>
+      <span className="indicator-value">{value}</span>
+    </li>
+  };
+
   if (fragments) {
+    if (!Array.isArray(fragments)) {
+      throw Error("can not render a non-array fragment.");
+    }
     return <div className="diagram-track">
       {
-        fragments.map((line) => {
-          return (
-            <div key={id} className="diagram-text-line">{line}</div>
-          )
+        fragments.map((segmentInfo, segmentInd) => {
+          const segmentName = segmentInfo.name;
+          const blockList = segmentInfo.blockList.slice().sort(function (a,b){
+            if (a.timeSpan.start == b.timeSpan.start) {
+              if (a.timeSpan.end == b.timeSpan.end) return 0;
+              if (a.timeSpan.end > b.timeSpan.end) return 1;
+              return -1;
+            };
+            if (a.timeSpan.start > b.timeSpan.start) return 1;
+            return -1;
+          });
+          
+          // we must sort block list first and align to time
+          
+          const blockDOM = blockList.map((blockInfo, blockInd) => {
+            const blockName = blockInfo.name;
+            const indicators = blockInfo.indicator;
+            const scheduler = blockInfo.scheduler;
+            const timeSpan = blockInfo.timeSpan;
+            const previewContent = blockInfo.previewContent;
+            return <div className="block" key={segmentInd+''+blockInd} id={`block-${segmentInd}-${blockInd}`}>
+                <div className="block-title">
+                  <div className="title-item">{timeSpan.start}</div>
+                  <div className="title-item">{timeSpan.end}</div>
+                  {(!scheduler) ? <div className="title-item cycle-icon"><ScheduleIcon/></div>: null }
+                </div>
+                <div className="block-content">
+                  <ul className="block-stat">
+                    {
+                      Object.keys(indicators).sort().map((name) => {
+                        return renderIndicator(name, indicators[name])
+                      })
+                    }
+                  </ul>
+                    <div className="detail-btn">
+                      {previewContent.map(record => {
+                        return <p>{record}</p>
+                      })}
+                    </div>
+                </div>
+            </div>
+          });
+          return <div className="segment" key={segmentInd} id={`segment-${segmentInd}`}>
+                    <div className="segment-title"></div>
+                    <div className="segment-content">{blockDOM}</div>
+          </div>
         })
       }
     </div>
@@ -128,10 +187,8 @@ const renderDiagram = (nodeDiagram) => {
       }
     </div>
   } else {
-    return <div className="diagram-track">
-      {
-        labelText
-      }
+    return <div className="diagram-track track-empty">
+      <p>Resource Not Found</p>
     </div>
   }
 };

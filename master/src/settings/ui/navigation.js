@@ -9,7 +9,7 @@ export const NavigationSetting = [
     { text: "Edit", tip: "2222", subMenu: [{ text: "Undo", tip: "Undo" }, { text: "Redo", tip: "Redo" }, {}, { text: "Cut", tip: "Cut" }, { text: "Copy", tip: "Copy" }, { text: "Paste", tip: "Paste" }] },
     { text: "View", tip: "2222", subMenu: [{ text: "Explorer", tip: "Explorer" }, { text: "Search", tip: "Search" }, { text: "Run", tip: "Run" }, { text: "Extensions", tip: "Extensions" }] },
     { text: "Run", tip: "2222", subMenu: [{ text: "Start Build", tip: "Start Build", action: buildAllTask, hotkey: "Ctrl+B",  }, { text: "Start Build(Current)", tip: "Start Build(Current)", action: buildSelectedTask, hotkey: "Ctrl+P",  }, {}, { text: "Add Build Profile...", tip: "Add Build Profile..." }] },
-    { text: "Go", tip: "2222", subMenu: [{ text: "Go to Event", tip: "Go to Event" }, { text: "Go to Time point", tip: "Go to Time point" }] },
+    { text: "Go", tip: "2222", subMenu: [{ text: "Go to Event", tip: "Go to Event" }, { text: "Go to Time point", tip: "Go to Time point" }, { text: "Go to Next Segment", tip: "Go to Next Segment" }, { text: "Go to Next Block", tip: "Go to Next Block" }] },
     { text: "Terminal", tip: "2222", subMenu: [] },
     { text: "Plugins", tip: "2222", subMenu: [{ text: "Add Plugin", tip: "Add Plugin" }, { text: "Plugin Manager...", tip: "Plugin Manager..." }] },
     { text: "Intelligent", tip: "2222", subMenu: [{ text: "Add Pattern...", tip: "Add Pattern..." }, {}, { text: "Performance Metrix...", tip: "Performance Metri..." }] },
