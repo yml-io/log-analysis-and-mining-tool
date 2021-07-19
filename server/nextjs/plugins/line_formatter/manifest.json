@@ -1,0 +1,34 @@
+{
+    "type": "middleware",
+    "name": "line-formatter",
+    "id": "acabula-middleware-line-text-formatter",
+  
+    "info": {
+      "description": "line formatter middleware for Acabula",
+      "author": {
+        "name": "Acabula Labs",
+        "url": "http://github.com/yumingle"
+      },
+      "keywords": ["line", "formatter", "middleware"],
+      "logos": {
+        "small": "img/line_formatter_logo_small.svg",
+        "large": "img/line_formatter_logo_large.svg"
+      },
+      "links": [
+        { "name": "Project site", "url": "https://github.com/yumingle/line_formatter" },
+        { "name": "Blog Post", "url": "" },
+        { "name": "MIT License", "url": "https://github.com/yumingle/line_formatter/blob/master/LICENSE" }
+      ],
+      "screenshots": [
+        { "name": "Donut!", "path": "img/line-formatter-donut.png" },
+        { "name": "line_formatter options", "path": "img/line-formatter-options.png" }
+      ],
+      "version": "%VERSION%",
+      "updated": "%TODAY%"
+    },
+  
+    "dependencies": {
+      "acabulaVersion": "4.6",
+      "plugins": []
+    }
+  }

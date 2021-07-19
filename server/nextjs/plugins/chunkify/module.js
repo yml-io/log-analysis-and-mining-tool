@@ -9,7 +9,7 @@ class Chunkify {
 
 return {
     handler: function(context, next) {
-        context.data += " | chunkify";
+        context.series += " | chunkify";
         next();
     }
 }

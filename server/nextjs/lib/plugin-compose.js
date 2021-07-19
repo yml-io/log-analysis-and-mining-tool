@@ -7,9 +7,6 @@ export const createComposeMiddleware = (cached, composeList) => {
     }
     return function(context) {
         let index = -1;
-        // if (index === i) {
-        //     throw new Error('next function triggered more than once');
-        // }
         return dispatch(0);
         function dispatch(i) {
             index++;
@@ -42,7 +39,7 @@ export const loadCachedMiddleware = () => {
             middlewares[meta.id] = Object.assign({}, meta, {exports}, {component});
             
         } catch(loadException) {
-            console.log(`can not load middleware: ${name}, ${loadException}`);
+            console.log(`can not load middleware: ${folder}, ${loadException}`);
         }
     }
     return middlewares;

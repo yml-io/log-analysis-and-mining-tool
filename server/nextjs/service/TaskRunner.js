@@ -31,6 +31,7 @@ class TaskRunner {
             
             // apply plugin according to user selected
             const applyedPluginResource = await this.pipelineWorker.applyPluginPipeline(resource, checkedPlugin);
+
             result = {fragments: applyedPluginResource, id, labelText};
         } else {
             result = {id, labelText};
