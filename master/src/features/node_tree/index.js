@@ -113,7 +113,7 @@ export const NodeTreeSlice = createSlice({
                                                 labelInfo: '123,133',
                                                 color: 'rgba(255,255,255, 1)',
                                                 bgColor: 'transparent',
-                                                resourceName :"2021071705150170debug.tmp",
+                                                resourceName :"2021071707435808debug.tmp",
                                                 nodeType:"Text File",
                                                 nodeDetailType:"Time Series",
                                                 checkedPlugin: [],

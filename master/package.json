@@ -54,6 +54,7 @@
     "css-loader": "^4.3.0",
     "file-loader": "^6.1.1",
     "html-webpack-plugin": "^3.2.0",
+    "html2canvas": "^1.1.4",
     "less-loader": "^7.3.0",
     "react-window": "^1.8.6",
     "redux-devtools": "^2.1.5",

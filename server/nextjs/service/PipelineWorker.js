@@ -104,20 +104,20 @@ class PipelineWorker {
                 thread_map[record_tid].push(dataFrame[i]);
             }
             const serverStartBlock = {};
-            serverStartBlock.name = dataFrame[start][0];
-            serverStartBlock.blockList = [];
+            serverStartBlock.segmentName = dataFrame[start][0];
+            serverStartBlock.group = [];
             for (let threadId in thread_map) {
                 const threadBlock = {};
-                threadBlock.name = threadId;
-                threadBlock.indicator = useStatistics(thread_map[threadId]);
-                // other indicator
+                threadBlock.blockName = threadId;
+                threadBlock.indicators = useStatistics(thread_map[threadId]);
+                // other
                 threadBlock.scheduler = false;
                 threadBlock.timeSpan = {
                     start: thread_map[threadId][0][0],
                     end: thread_map[threadId][ thread_map[threadId].length - 1 ][0],
                 };
                 threadBlock.previewContent = thread_map[threadId].slice(0, 5).map(record => record[4]);
-                serverStartBlock.blockList.push(threadBlock);
+                serverStartBlock.group.push(threadBlock);
             }
             result.push(serverStartBlock);
             // clear map because the tid will reused in difference server onstart

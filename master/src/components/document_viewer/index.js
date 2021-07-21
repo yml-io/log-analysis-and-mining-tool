@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { useSelector, useDispatch } from "react-redux";
 import "./index.less";
@@ -15,6 +15,7 @@ import Box from '@material-ui/core/Box';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { Avatar } from "@material-ui/core";
 import { selectActivedDocInd, selectDocumentList } from "../../features/document_set";
+import html2canvas from 'html2canvas';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -106,57 +107,51 @@ const StyledTab = withStyles((theme) => ({
 }))((props) => <Tab disableRipple {...props} />);
 
 
-const renderDiagram = (nodeDiagram) => {
-  const {id, labelText, compareGroup, fragments} = nodeDiagram;
+const renderIndicator = (name, value) => {
+  let classAnotation = "";
+  if (name=="ERROR") classAnotation = "indicator-error";
+  if (name=="WARN") classAnotation = "indicator-warn";
+  if (name=="INFO") classAnotation = "indicator-info";
+  if (name=="DEBUG") classAnotation = "indicator-debug";
+  
+  return <li className="indicator" key={`${name}`}>
+    <span className={`indicator-avatar ${classAnotation}`}></span>
+    <span className="indicator-value">{value}</span>
+  </li>
+};
 
-  const renderIndicator = (name, value) => {
-    let classAnotation = "";
-    if (name=="ERROR") classAnotation = "indicator-error";
-    if (name=="WARN") classAnotation = "indicator-warn";
-    if (name=="INFO") classAnotation = "indicator-info";
-    if (name=="DEBUG") classAnotation = "indicator-debug";
-    
+const renderDiagram = (diagram) => {
+  const renderTrack = (track, colInd, diagram) => {
+    const { id, labelText, cellMap, } = track;
+    console.log(`render track id: ${id}`);
 
-    return <li className={`stat-item`}>
-      <span className={`indicator-avatar ${classAnotation}`}></span>
-      <span className="indicator-value">{value}</span>
-    </li>
-  };
+    return cellMap.map((rowData, rowInd) => {
+      // find rows height in all track
+      const boundRowHeight = diagram.reduce((t, e) => {
+        return Math.max(t, e.cellMap[rowInd].length)
+      }, 0);
+      
+      return <div className="diagram-row" id={`diagram-row-${rowInd}`} key={`${rowInd}`} style={{height: boundRowHeight * 133}}>
+        {
+          rowData.map((layer, layerInd) => {
+            const {
+              blockName,
+              indicators,
+              previewContent,
+              scheduler,
+              segName,
+              timeSpan,
+              // depth, 
+            } = layer;
 
-  if (fragments) {
-    if (!Array.isArray(fragments)) {
-      throw Error("can not render a non-array fragment.");
-    }
-    return <div className="diagram-track">
-      {
-        fragments.map((segmentInfo, segmentInd) => {
-          const segmentName = segmentInfo.name;
-          const blockList = segmentInfo.blockList.slice().sort(function (a,b){
-            if (a.timeSpan.start == b.timeSpan.start) {
-              if (a.timeSpan.end == b.timeSpan.end) return 0;
-              if (a.timeSpan.end > b.timeSpan.end) return 1;
-              return -1;
-            };
-            if (a.timeSpan.start > b.timeSpan.start) return 1;
-            return -1;
-          });
-          
-          // we must sort block list first and align to time
-          
-          const blockDOM = blockList.map((blockInfo, blockInd) => {
-            const blockName = blockInfo.name;
-            const indicators = blockInfo.indicator;
-            const scheduler = blockInfo.scheduler;
-            const timeSpan = blockInfo.timeSpan;
-            const previewContent = blockInfo.previewContent;
-            return <div className="block" key={segmentInd+''+blockInd} id={`block-${segmentInd}-${blockInd}`}>
-                <div className="block-title">
+            return <div className="diagram-layer" id={`layer-${colInd}-${rowInd}-${layerInd}`} key={`${colInd}-${rowInd}-${layerInd}`}>
+              <div className="layer-title">
                   <div className="title-item">{timeSpan.start}</div>
                   <div className="title-item">{timeSpan.end}</div>
                   {(!scheduler) ? <div className="title-item cycle-icon"><ScheduleIcon/></div>: null }
                 </div>
-                <div className="block-content">
-                  <ul className="block-stat">
+                <div className="layer-content">
+                  <ul className="layer-stat">
                     {
                       Object.keys(indicators).sort().map((name) => {
                         return renderIndicator(name, indicators[name])
@@ -164,47 +159,103 @@ const renderDiagram = (nodeDiagram) => {
                     }
                   </ul>
                     <div className="detail-btn">
-                      {previewContent.map(record => {
-                        return <p>{record}</p>
+                      {previewContent.map((record, itemInd) => {
+                        return <p key={`item-${itemInd}`}>{record}</p>
                       })}
                     </div>
                 </div>
             </div>
-          });
-          return <div className="segment" key={segmentInd} id={`segment-${segmentInd}`}>
-                    <div className="segment-title"></div>
-                    <div className="segment-content">{blockDOM}</div>
-          </div>
-        })
-      }
-    </div>
-  } else if (compareGroup) {
-    return <div className="diagram-track-group">
-      {
-        compareGroup.map((subDiagram) => {
-            return renderDiagram(subDiagram)
-        })
-      }
-    </div>
-  } else {
-    return <div className="diagram-track track-empty">
-      <p>Resource Not Found</p>
-    </div>
-  }
+
+          })
+        }
+      </div>
+    })
+  };
+  return <div className="diagram-table">
+    {
+      diagram.map((track, trackInd) => {
+        return <div className="diagram-col" id={`diagram-col-${trackInd}`} key={`${trackInd}`}>
+          { renderTrack(track, trackInd, diagram) }
+        </div>
+      })
+    }
+  </div>
+  
+  // const {id, labelText, compareGroup, fragments} = diagramMap2D;
+
+  // if (fragments) {
+  //   if (!Array.isArray(fragments)) {
+  //     throw Error("can not render a non-array fragment.");
+  //   }
+  //   return <div className="diagram-track">
+  //     {
+  //       fragments.map((segmentInfo, segmentInd) => {
+  //         const segmentName = segmentInfo.name;
+  //         const blockList = segmentInfo.blockList.slice().sort(function (a,b){
+  //           if (a.timeSpan.start == b.timeSpan.start) {
+  //             if (a.timeSpan.end == b.timeSpan.end) return 0;
+  //             if (a.timeSpan.end > b.timeSpan.end) return 1;
+  //             return -1;
+  //           };
+  //           if (a.timeSpan.start > b.timeSpan.start) return 1;
+  //           return -1;
+  //         });
+          
+  //         // we must sort block list first and align to time
+          
+  //         const blockDOM = blockList.map((blockInfo, blockInd) => {
+  //           
+  //         });
+  //         return <div className="segment" key={segmentInd} id={`segment-${segmentInd}`}>
+  //                   <div className="segment-title"></div>
+  //                   <div className="segment-content">{blockDOM}</div>
+  //         </div>
+  //       })
+  //     }
+  //   </div>
+  // } else if (compareGroup) {
+  //   return <div className="diagram-track-group">
+  //     {
+  //       compareGroup.map((subDiagram) => {
+  //           return renderDiagram(subDiagram)
+  //       })
+  //     }
+  //   </div>
+  // } else {
+  //   return <div className="diagram-track track-empty">
+  //     <p>Resource Not Found</p>
+  //   </div>
+  // }
 };
 
+const canvasRenderOption = {
+  scale:0.25,
+  dpi: 900,
+  useCORS: true,
+  async: true,
+  background: "#ffffff", 
+  width: 97,
+  height: 493,
+};
 
 function DocumentViewer(props) {
   let documentList = useSelector(selectDocumentList);
   let activedDocInd = useSelector(selectActivedDocInd);
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   Avatar();
-  //   return ()=> {
+  useEffect(() => {
+    html2canvas(document.querySelector(".diagram-table"), canvasRenderOption).then(function(canvas) {
+      let parent = document.querySelector(".snapshot-canvas");
+      while (parent.firstChild) {
+        parent.firstChild.remove()
+    }
+    parent.appendChild(canvas);
+  });
+    // Avatar();
+    // return ()=> {
 
-  //   };
-  // }, [conter]);
+    // };
+  });
 
   // // const {title, tag} = props;
   // const [state, setState] = React.useState({
@@ -266,6 +317,8 @@ function DocumentViewer(props) {
                 </TabPanel>)
                 })
             }
+            </div>
+            <div className="snapshot-canvas">
             </div>
           </div>
         )
