@@ -19,7 +19,6 @@ function NavigatorBar(props){
                             {element.subMenu?
                             element.subMenu.map((subElement, _subInd) => {
                                 if (Object.getOwnPropertyNames(subElement).length > 0)
-                                console.log(subElement.action)
                                 return (<div className="menu-sub-button" key={_subInd} onClick={(subElement.action) ? (e) => {dispatch(subElement.action());} : null}>
                                     <span>{subElement.text}</span>
                                     <span>{subElement.hotkey}</span>

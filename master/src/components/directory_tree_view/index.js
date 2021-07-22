@@ -10,7 +10,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import TreeNodeContextMenu from '@/components/tree_node_context_menu';
 import NodePropertiesDialog from '@/components/dialog/node_properties_dialog';
-
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { useDispatch, useSelector } from "react-redux";
 import { selectTreeData, selectCurrentId, switchSelectNodeById, setNodeTreeContextMenu, } from "@/features/node_tree";
 
@@ -147,7 +148,7 @@ const StyledTreeView = withStyles({
       },
 }, {name: "styled-tree-view"})(TreeView);
 
-function DirectoryTree() {
+function DirectoryTreeView() {
   const treeData = useSelector(selectTreeData);
   const currentSelectedNodeId = useSelector(selectCurrentId);
   const dispatch = useDispatch();
@@ -183,8 +184,9 @@ function DirectoryTree() {
         defaultSelected={[currentSelectedNodeId]}
         selected={currentSelectedNodeId}
         onNodeSelect={(event, nodeId)=>dispatch(switchSelectNodeById(nodeId))}
-        defaultCollapseIcon={<ArrowDropDownIcon />}
-        defaultExpandIcon={<ArrowRightIcon />}
+        defaultCollapseIcon={<ExpandMoreIcon />}
+        defaultExpandIcon={<ChevronRightIcon />}
+        
         defaultEndIcon={<div style={{ width: 54 }} />}
       >
       {treeContent}
@@ -196,4 +198,4 @@ function DirectoryTree() {
   );
 }
 
-export default DirectoryTree;
+export default DirectoryTreeView;

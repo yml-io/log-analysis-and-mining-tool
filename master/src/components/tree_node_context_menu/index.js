@@ -16,6 +16,7 @@ import {
     selectContextMenu,
     setShowPropertiesDilog,
 } from '@/features/node_tree';
+import { buildSelectedTask } from '@/features/build_profile';
 import { useDispatch, useSelector } from "react-redux";
 import NodePropertiesDialog from '@/components/dialog/node_properties_dialog';
 import { setNodeTreeContextMenu, } from "@/features/node_tree";
@@ -77,7 +78,7 @@ export default function TreeNodeContextMenu(props) {
         <StyledMenuItem onClick={() => {dispatch(appendNode()); handlerCallback();}}>Add Node</StyledMenuItem>
         <StyledMenuItem onClick={handlerCallback}>Copy</StyledMenuItem>
         <StyledMenuItem onClick={handlerCallback}>Paste</StyledMenuItem>
-        <StyledMenuItem onClick={handlerCallback}>Build Node</StyledMenuItem>
+        <StyledMenuItem onClick={() => {dispatch(buildSelectedTask()); handlerCallback();}}>Build Node</StyledMenuItem>
         <StyledMenuItem onClick={() => {dispatch(removeNodeTree()); handlerCallback();}}>Delete</StyledMenuItem>
         <StyledMenuItem onClick={() => {dispatch(updateNodeDataObject({bgColor: "rgba(250, 250, 50, .5)"})); handlerCallback();}}>Highlight</StyledMenuItem>
         <StyledMenuItem onClick={() => {dispatch(setShowPropertiesDilog(true)); handlerCallback()}}>Properties</StyledMenuItem>

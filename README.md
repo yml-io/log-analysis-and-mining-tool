@@ -12,13 +12,14 @@
 # Features
 1. 支持多种序列资源类型。
 2. 提供插件扩展，可选择性的将需要的插件组成计算管道。灵感来自 koa-compose。
-3. 异步任务资源池。  -- TODO
-4. *** 面向业务需求，提供可选的流程图生成类型：event scheduler workflow 三种计算类型  -- CURRENT
-5. 日志和性能测量指标通知队列。  -- TODO 
-6. 结构化时间序列数据流中的事件边界自学习（序列标注），事件共现分析，异常检测。  -- TODO
-7. TypeScript 支持。  -- TODO 
-8. 提供 keyword 快速并行查询。（需要进一步分析可行性）
-
+3. [#########]  异步任务资源池。  -- TODO
+4. 生成各资源文件的基于线程时序图的概括块。
+5. [#########]  日志和性能测量指标通知 webSocket 连接。  -- TODO 
+6. [#########]  插件配置页面    ---- TODO
+7. [#########]  TypeScript 支持。  -- TODO 
+8. [#########]  基于 elasticsearch 和 redis，提供 keyword 快速并行查询。主题挖掘? ---- TODO
+9. [#########]  命令面板    ---- TODO
+10. 事件边界自学习（可识别出 event），事件共现分析（可识别出 scheduler， 甚至 workflow）  ==>> 异常检测, 预测     -- TODO
 
 # How to create a plugin
 一个 plugin 是拥有如下文件的目录。

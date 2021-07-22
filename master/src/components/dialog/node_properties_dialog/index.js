@@ -95,24 +95,6 @@ const StyledRadioGroup = withStyles((theme) => ({
   },
 }))(RadioGroup);
 
-// const stickyListStyle = makeStyles((theme) => ({
-//   root: {
-//     width: '100%',
-//     maxWidth: 360,
-//     // backgroundColor: theme.palette.background.paper,
-//     backgroundColor: 'rgba(27, 44, 73, 0.95)',
-//     position: 'relative',
-//     overflow: 'auto',
-//     maxHeight: 300,
-//   },
-//   listSection: {
-//     backgroundColor: 'inherit',
-//   },
-//   ul: {
-//     backgroundColor: 'inherit',
-//     padding: 0,
-//   },
-// }));
 const StyledList = withStyles((theme) => ({
   root: {
     width: '100%',

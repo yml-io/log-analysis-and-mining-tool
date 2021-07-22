@@ -90,7 +90,8 @@
                             justify-content: start;
                             align-items: stretch;
                             .layer-stat {
-                                flex: 1;
+                                flex: 0;
+                                flex-basis: 50px;
                                 display: inline-block;
                                 list-style: none;
                                 .indicator {
@@ -103,18 +104,18 @@
                                         vertical-align: middle;
                                     }
                                     .indicator-value {
+                                        display: inline-block;
                                         margin-left: 5px;
                                     }
                                 }
                             }
                             .detail-btn {
                                 cursor: pointer;
-                                flex: 2;
+                                flex: 1;
                                 display: block;
                                 max-width: 200px;
                                 max-height: 100px;
                                 overflow: auto;
-                                float: right;
                                 background-image: -moz-linear-gradient(rgb(255, 249, 223) 0%, rgb(199, 217, 255) 100%);
                                 background-image: -webkit-linear-gradient(rgb(255, 249, 223), rgb(199, 217, 255));
                                 background-image: linear-gradient(rgb(255, 249, 223) 0%, rgb(199, 217, 255) 100%, rgb(199, 217, 255) 95%);
@@ -219,5 +220,9 @@
         top: 30px;
         width: 97px;
         height: 300px;
+        opacity: .5;
+    }
+    .snapshot-canvas:hover {
+        opacity: 1;
     }
 }
