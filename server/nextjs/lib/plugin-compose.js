@@ -36,7 +36,7 @@ export const loadCachedMiddleware = () => {
             const component = {
                 index: path.join(filePath, 'module.html')
             };
-            middlewares[meta.id] = Object.assign({}, meta, {exports}, {component});
+            middlewares[meta.id] = Object.assign({}, meta, {exports, component});
             
         } catch(loadException) {
             console.log(`can not load middleware: ${folder}, ${loadException}`);
@@ -44,3 +44,4 @@ export const loadCachedMiddleware = () => {
     }
     return middlewares;
 }
+

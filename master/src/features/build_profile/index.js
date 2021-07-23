@@ -2,12 +2,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { useSelector, useDispatch } from 'react-redux';
 import { selectTreeData, selectCurrentNode, } from "@/features/node_tree";
 import { selectDocumentList, selectActivedDocInd, } from "@/features/document_set";
+import { selectTermCorpus, updateSearchTree, } from "@/features/search_structure";
 import { BuildProfileInfo } from "./build_profile_info";
 import { DocumentInfo } from "@/features/document_set/document_type";
 // import store from '@/app/store'; // 不能添加这句
 import * as axios from 'axios';
 import { selectCurrentId } from "../node_tree";
-import {addDocument} from '@/features/document_set';  // 不能添加这句
+import { addDocument } from '@/features/document_set';  // 不能添加这句
 
 
 export const buildSelectedTask = createAsyncThunk(
@@ -17,15 +18,17 @@ export const buildSelectedTask = createAsyncThunk(
         // can not useSelector here
         // const nodeTree = useSelector(selectCurrentNode);
         const nodeTree = selectCurrentNode(thunkAPI.getState());
+        const keywords = selectTermCorpus(thunkAPI.getState());
 
         const taskParams = {
             nodeTree: nodeTree,
+            keywords: keywords,
             taskProfile: {}
         };
         const response = await axios({
             url: 'http://localhost:3000/api/task/submit',
             method: 'post',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             data: taskParams,
         });
 
@@ -41,22 +44,24 @@ export const buildAllTask = createAsyncThunk(
     // The payload creator receives the partial `{title, content, user}` object
     async (args, thunkAPI) => {
         const nodeTree = selectTreeData(thunkAPI.getState());
+        const keywords = selectTermCorpus(thunkAPI.getState());
 
         const taskParams = {
             nodeTree,
+            keywords: keywords,
             taskProfile: {}
         };
 
         const response = await axios({
             url: 'http://localhost:3000/api/task/submit',
             method: 'post',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             data: JSON.stringify(taskParams),
         });
 
         // create a new tab
         createNewTab(thunkAPI, response.data);
-        
+
         return response.data;
     }
 )
@@ -64,6 +69,8 @@ export const buildAllTask = createAsyncThunk(
 const createNewTab = (thunkAPI, responseData) => {
     const tabTitle = `${new Date().toISOString().replace(/[T]/g, ' ').replace(/\.(\d\d).+/, '$1')}`;
     thunkAPI.dispatch(addDocument(DocumentInfo(tabTitle, responseData.data.diagram)));
+
+    thunkAPI.dispatch(updateSearchTree(responseData.data.index));
 }
 
 export const BuildProfileSlice = createSlice({
@@ -101,7 +108,7 @@ export const BuildProfileSlice = createSlice({
 });
 
 
-export const {createProfile} = BuildProfileSlice.actions;
+export const { createProfile } = BuildProfileSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

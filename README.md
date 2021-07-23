@@ -56,3 +56,5 @@ module.html 引用的 JS 文件。可以实现一些网页元素控件的交互�
 
 每种类型会影响任务计算时对节点的处理过程。整棵节点树会解析为一个计算流图。
 
+# deployment
+1. docker run -d -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.13.4

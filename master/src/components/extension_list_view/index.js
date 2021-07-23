@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './index.less';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
@@ -9,8 +9,8 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import CommentIcon from '@material-ui/icons/Comment';
 import { useSelector } from 'react-redux';
-import { addPlugin, removePlugin, updatePluginObject, selectPluginList } from '@/features/plugin';
-
+import { addPlugin, removePlugin, updatePluginObject, selectPluginList, getPluginList, getPluginProductPage } from '@/features/plugin';
+import { useDispatch } from 'react-redux';
 
 const StyledList = withStyles((theme) => ({
     root: {
@@ -25,7 +25,11 @@ const StyledListItem = withStyles((theme) => ({
 }))(ListItem);
 
 export default function ExtensionListView() {
+    const dispatch = useDispatch();
     const pluginList = useSelector(selectPluginList);
+    useEffect(() => {
+        dispatch(getPluginList)
+      }, []);
     return (
         <div className="plugin-list-view">
             <StyledList>
@@ -33,7 +37,7 @@ export default function ExtensionListView() {
                     pluginList.map((plugin, _index) => {
                         const { id, type, name, version, description, author, enabled } = plugin;
                         return (
-                            <StyledListItem key={_index} role={undefined} button>
+                            <StyledListItem key={_index} role={undefined} button onClick={() => dispatch(getPluginProductPage(id))}>
                                 <ListItemIcon>
                                     <Avatar />
                                 </ListItemIcon>

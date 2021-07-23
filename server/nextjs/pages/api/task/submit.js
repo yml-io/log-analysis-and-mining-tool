@@ -11,9 +11,9 @@ const cors = initMiddleware(
 export default async function handler(req, res) {
   await cors(req, res)
 
-  const {nodeTree, buildProfile} = req.body;
+  const {nodeTree, keywords, buildProfile} = req.body;
 
-  const taskRunner = new TaskRunner(nodeTree, buildProfile);
+  const taskRunner = new TaskRunner(nodeTree, keywords, buildProfile);
   const analysisDiagram = await taskRunner.run();
   res.status(200).json({data: { diagram: analysisDiagram }})
 }
