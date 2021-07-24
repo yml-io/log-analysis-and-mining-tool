@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {DocumentInfo} from "./document_type";
+import { DocumentInfo } from "./document_type";
 
 export const documentSetSlice = createSlice({
     name: "documentSet",
@@ -17,7 +17,7 @@ export const documentSetSlice = createSlice({
             state.activedDocInd = state.documentList.length - 1;
         },
         addDocument: (state, action) => {
-            state.documentList.push(DocumentInfo(action.payload.title, action.payload.content));
+            state.documentList.push(DocumentInfo(action.payload.title, action.payload.content, action.payload.type));
             state.activedDocInd = state.documentList.length - 1;
         },
         changeActivedInd: (state, action) => {
@@ -32,7 +32,7 @@ export const documentSetSlice = createSlice({
 });
 
 
-export const {addBlankDocument, addDocument, removeDocument, changeActivedInd} = documentSetSlice.actions;
+export const { addBlankDocument, addDocument, removeDocument, changeActivedInd } = documentSetSlice.actions;
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`

@@ -28,7 +28,7 @@ export default function ExtensionListView() {
     const dispatch = useDispatch();
     const pluginList = useSelector(selectPluginList);
     useEffect(() => {
-        dispatch(getPluginList)
+        dispatch(getPluginList());
       }, []);
     return (
         <div className="plugin-list-view">

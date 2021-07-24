@@ -23,8 +23,8 @@
         { "name": "Donut!", "path": "img/syntax-highlight-donut.png" },
         { "name": "syntax highlight options", "path": "img/syntax-highlight-options.png" }
       ],
-      "version": "%VERSION%",
-      "updated": "%TODAY%"
+      "version": "0.0.1",
+      "updated": "2021-07-24"
     },
   
     "dependencies": {

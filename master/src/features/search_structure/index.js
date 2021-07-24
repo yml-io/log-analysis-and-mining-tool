@@ -1,21 +1,35 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { addDocument } from '@/features/document_set';
+import { DocumentInfo } from "@/features/document_set/document_type";
 import * as axios from 'axios';
 // thunk action function here
 export const getKeywordSearchResult = createAsyncThunk(
     'searchStructure/getKeywordSearchResult',
     // The payload creator receives the partial `{title, content, user}` object
-    async keyword => {
+    async (args, thunkAPI) => {
         // We send the initial data to the fake API server
+        const postParams = {
+            keyword: args,
+        };
+
         const response = await axios({
             url: 'http://localhost:3000/api/search/keyword',
             method: 'post',
-            headers: {'Content-Type': 'multipart/form-data;charset=UTF-8'},
-            data: {keyword},
+            headers: { 'Content-Type': 'application/json' },
+            data: postParams,
         });
+        // create a new tab
+        createNewTab(thunkAPI, response.data);
+
         // The response includes the complete post object, including unique ID
         return response.data;
     }
 )
+
+const createNewTab = (thunkAPI, responseData) => {
+    const tabTitle = `${new Date().toISOString().replace(/[T]/g, ' ').replace(/\.(\d\d).+/, '$1')}`;
+    thunkAPI.dispatch(addDocument(DocumentInfo(tabTitle, responseData.data.hits, responseData.data.type)));
+}
 
 export const SearchStructureSlice = createSlice({
     name: 'searchStructure',

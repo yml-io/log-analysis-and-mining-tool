@@ -1,9 +1,12 @@
 import ESClient from '../lib/es_client';
+import { once } from 'events';
+import { createInterface } from 'readline';
+import ResourceManager from './ResourceManager';
 
 const indexing = async (root, keywords) => {
     const newIndexName = 'test-index';
     const TIME_FORMAT_STR = /(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{4}) (\w+) \[([^\]]+)\] (\w+) - (.*)$/;
-
+    const resourceManager = new ResourceManager(root, {});
     // create index for new indexing task commit
     await ESClient.indices.create({
         index: newIndexName,
@@ -30,16 +33,16 @@ const indexing = async (root, keywords) => {
             queue = queue.concat(children);
         } else if (resourceName) {
             // read resource
-            const resource = await this.resourceManager.getReadStream(resourceName);
-            const readBuffer = [];
+            const resource = await resourceManager.getReadStream(resourceName);
+            let readBuffer = [];
             try {
                 const rl = createInterface({
                     input: resource,
                     crlfDelay: Infinity
                 });
 
-                rl.on('line', (line) => {
-                    text = line.trim();
+                rl.on('line', async (line) => {
+                    const text = line.trim();
                     const cap_group = TIME_FORMAT_STR.exec(text);
                     if (cap_group) {
                         re_date = cap_group[1]
@@ -104,8 +107,8 @@ const indexing = async (root, keywords) => {
 
     const result = Object.assign({}, keywords);
     for (let c of keywords) {
-        console.log(`search category ${close} record from ElasticSearch.`)
-        keywords.forEach(k => {
+        console.log(`search category ${c} record from ElasticSearch.`)
+        keywords.map(async (k) => {
             const { body } = await ESClient.search({
                 index: newIndexName,
                 // type: '_doc', // uncomment this line if you are using Elasticsearch ≤ 6
@@ -132,11 +135,12 @@ export const search = async (indexName, keyword) => {
             }
         }
     });
+
     return body.hits.hits;
 };
 
 export default {
-    submit: (keywords) => {
+    submit: (documentTree, keywords) => {
         return indexing(documentTree, keywords);
     }
 }

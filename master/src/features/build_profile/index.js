@@ -8,8 +8,7 @@ import { DocumentInfo } from "@/features/document_set/document_type";
 // import store from '@/app/store'; // 不能添加这句
 import * as axios from 'axios';
 import { selectCurrentId } from "../node_tree";
-import { addDocument } from '@/features/document_set';  // 不能添加这句
-
+import { addDocument } from '@/features/document_set';
 
 export const buildSelectedTask = createAsyncThunk(
     'buildProfile/buildSelectedTask',
@@ -68,9 +67,9 @@ export const buildAllTask = createAsyncThunk(
 
 const createNewTab = (thunkAPI, responseData) => {
     const tabTitle = `${new Date().toISOString().replace(/[T]/g, ' ').replace(/\.(\d\d).+/, '$1')}`;
-    thunkAPI.dispatch(addDocument(DocumentInfo(tabTitle, responseData.data.diagram)));
+    thunkAPI.dispatch(addDocument(DocumentInfo(tabTitle, responseData.data.diagram||responseData.data.searchResult, responseData.data.type)));
 
-    thunkAPI.dispatch(updateSearchTree(responseData.data.index));
+    // thunkAPI.dispatch(updateSearchTree(responseData.data.index));
 }
 
 export const BuildProfileSlice = createSlice({

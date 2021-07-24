@@ -12,8 +12,6 @@ class PipelineWorker {
         const composedMiddleware = createComposeMiddleware(
             cachedMiddleware, 
             ["acabula-middleware-line-text-formatter",
-            // "acabula-middleware-chunkify", 
-            // "acabula-middleware-genelizer", 
             "acabula-middleware-syntax-highlight"]);
         this.composedPlugin = composedMiddleware;
     }

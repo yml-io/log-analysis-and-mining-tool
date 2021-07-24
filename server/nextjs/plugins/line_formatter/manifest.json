@@ -23,8 +23,8 @@
         { "name": "Donut!", "path": "img/line-formatter-donut.png" },
         { "name": "line_formatter options", "path": "img/line-formatter-options.png" }
       ],
-      "version": "%VERSION%",
-      "updated": "%TODAY%"
+      "version": "0.0.1",
+      "updated": "2021-07-24"
     },
   
     "dependencies": {

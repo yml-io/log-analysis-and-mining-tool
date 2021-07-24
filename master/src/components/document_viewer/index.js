@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { useSelector, useDispatch } from "react-redux";
 import "./index.less";
@@ -6,16 +6,17 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
 import { addBlankDocument, addDocument, removeDocument, changeActivedInd } from '@/features/document_set';
-import ScheduleIcon from '@material-ui/icons/Schedule';
 import CloseIcon from '@material-ui/icons/Close';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import { Avatar } from "@material-ui/core";
-import { selectActivedDocInd, selectDocumentList } from "../../features/document_set";
-import html2canvas from 'html2canvas';
+import { selectActivedDocInd, selectDocumentList } from "@/features/document_set";
+import DiagramView from '@/components/document_viewer/document_diagram_view';
+import SearchResultView from '@/components/document_viewer/search_result_view';
+import PluginDetailView from '@/components/document_viewer/plugin_detail_view';
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -104,152 +105,21 @@ const StyledTab = withStyles((theme) => ({
 }))((props) => <Tab disableRipple {...props} />);
 
 
-const renderIndicator = (name, value) => {
-  let classAnotation = "";
-  if (name == "ERROR") classAnotation = "indicator-error";
-  if (name == "WARN") classAnotation = "indicator-warn";
-  if (name == "INFO") classAnotation = "indicator-info";
-  if (name == "DEBUG") classAnotation = "indicator-debug";
 
-  return <li className="indicator" key={`${name}`}>
-    <span className={`indicator-avatar ${classAnotation}`}></span>
-    <span className="indicator-value">{value}</span>
-  </li>
-};
-
-const renderDiagram = (diagram) => {
-  const renderTrack = (track, colInd, diagram) => {
-    const { id, labelText, cellMap, } = track;
-    console.log(`render track id: ${id}`);
-
-    return cellMap.map((rowData, rowInd) => {
-      // find rows height in all track
-      const boundRowHeight = diagram.reduce((t, e) => {
-        return Math.max(t, e.cellMap[rowInd].length)
-      }, 0);
-
-      return <div className="diagram-row" id={`diagram-row-${rowInd}`} key={`${rowInd}`} style={{ height: boundRowHeight * 133 }}>
-        {
-          rowData.map((layer, layerInd) => {
-            const {
-              blockName,
-              indicators,
-              previewContent,
-              scheduler,
-              segName,
-              timeSpan,
-              // depth, 
-            } = layer;
-
-            return <div className="diagram-layer" id={`layer-${colInd}-${rowInd}-${layerInd}`} key={`${colInd}-${rowInd}-${layerInd}`}>
-              <div className="layer-title">
-                <div className="title-item">{timeSpan.start}</div>
-                <div className="title-item">{timeSpan.end}</div>
-                {(!scheduler) ? <div className="title-item cycle-icon"><ScheduleIcon /></div> : null}
-              </div>
-              <div className="layer-content">
-                <ul className="layer-stat">
-                  {
-                    Object.keys(indicators).sort().map((name) => {
-                      return renderIndicator(name, indicators[name])
-                    })
-                  }
-                </ul>
-                <div className="detail-btn">
-                  {previewContent.map((record, itemInd) => {
-                    return <p key={`item-${itemInd}`}>{record}</p>
-                  })}
-                </div>
-              </div>
-            </div>
-
-          })
-        }
-      </div>
-    })
-  };
-  return <div className="diagram-table">
-    {
-      diagram.map((track, trackInd) => {
-        return <div className="diagram-col" id={`diagram-col-${trackInd}`} key={`${trackInd}`}>
-          {renderTrack(track, trackInd, diagram)}
-        </div>
-      })
-    }
-  </div>
-
-  // const {id, labelText, compareGroup, fragments} = diagramMap2D;
-
-  // if (fragments) {
-  //   if (!Array.isArray(fragments)) {
-  //     throw Error("can not render a non-array fragment.");
-  //   }
-  //   return <div className="diagram-track">
-  //     {
-  //       fragments.map((segmentInfo, segmentInd) => {
-  //         const segmentName = segmentInfo.name;
-  //         const blockList = segmentInfo.blockList.slice().sort(function (a,b){
-  //           if (a.timeSpan.start == b.timeSpan.start) {
-  //             if (a.timeSpan.end == b.timeSpan.end) return 0;
-  //             if (a.timeSpan.end > b.timeSpan.end) return 1;
-  //             return -1;
-  //           };
-  //           if (a.timeSpan.start > b.timeSpan.start) return 1;
-  //           return -1;
-  //         });
-
-  //         // we must sort block list first and align to time
-
-  //         const blockDOM = blockList.map((blockInfo, blockInd) => {
-  //           
-  //         });
-  //         return <div className="segment" key={segmentInd} id={`segment-${segmentInd}`}>
-  //                   <div className="segment-title"></div>
-  //                   <div className="segment-content">{blockDOM}</div>
-  //         </div>
-  //       })
-  //     }
-  //   </div>
-  // } else if (compareGroup) {
-  //   return <div className="diagram-track-group">
-  //     {
-  //       compareGroup.map((subDiagram) => {
-  //           return renderDiagram(subDiagram)
-  //       })
-  //     }
-  //   </div>
-  // } else {
-  //   return <div className="diagram-track track-empty">
-  //     <p>Resource Not Found</p>
-  //   </div>
-  // }
-};
-
-const canvasRenderOption = {
-  scale: 0.25,
-  dpi: 900,
-  useCORS: true,
-  async: true,
-  background: "#ffffff",
-  width: 97,
-  height: 493,
+const renderDocument = (view) => {
+  if (view.type == "documentDiagram") {
+    return <DiagramView view={view.content} />
+  } else if (view.type == "searchResult") { 
+    return <SearchResultView view={view.content} />
+  } else if (view.type == "pluginDetail") {
+    return <PluginDetailView view={view.content} />
+  }
 };
 
 function DocumentViewer(props) {
   let documentList = useSelector(selectDocumentList);
   let activedDocInd = useSelector(selectActivedDocInd);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    html2canvas(document.querySelector(".diagram-table"), canvasRenderOption).then(function (canvas) {
-      let parent = document.querySelector(".snapshot-canvas");
-      while (parent.firstChild) {
-        parent.firstChild.remove()
-      }
-      parent.appendChild(canvas);
-    });
-    // return ()=> {};
-  });
 
   function createPinTab(tabIndex, title) {
     return <div className={`pin-tab`}>
@@ -259,7 +129,6 @@ function DocumentViewer(props) {
     </div>
   }
 
-  // onclick 里面一定要是箭头函数！！！！！！！！！！！！！！！
   if (!documentList.length) { return <p className="black-placeholder"></p>; }
   return (
     (<div className="document-viewer">
@@ -281,7 +150,7 @@ function DocumentViewer(props) {
         {
           documentList.map((tabInfo, tabInd) => {
             return (<TabPanel value={activedDocInd} index={tabInd} key={tabInd}>
-              {tabInfo ? renderDiagram(tabInfo.content) : null}
+              {tabInfo ? renderDocument(tabInfo) : null}
             </TabPanel>)
           })
         }

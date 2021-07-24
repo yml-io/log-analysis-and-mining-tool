@@ -43,8 +43,8 @@ class TaskRunner {
         const documentTree = await this.createResourceFlow(this.nodeTree);
         const diagram = DiagramService.submit(documentTree);
         // indexing the resource using keyword setting
-        const indexingResult = IndexService.submit(this.nodeTree, this.keywords);
-        return { diagram, indexingResult };
+        // const indexingResult = IndexService.submit(this.nodeTree, this.keywords);
+        return { type: "documentDiagram", diagram };
     }
 }
 
