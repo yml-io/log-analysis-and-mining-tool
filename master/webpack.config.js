@@ -13,7 +13,7 @@ module.exports={
     devtool: 'inline-source-map', // !!!!
     mode: 'production',
     resolve: {
-        extensions: [".js", ".jsx", ".json"],
+        extensions: [".js", ".jsx", ".json", ".ts"],
         alias: {
             "@": path.resolve("src")
         }
@@ -45,6 +45,18 @@ module.exports={
                     }
                 },
                 exclude: /node_modules/
+            },
+            {
+                test: /\.tsx?$/,
+                use: [
+                    {
+                        loader: 'ts-loader',
+                        options: {
+                            configFile: path.resolve(__dirname, './tsconfig.json'),
+                        },
+                    },
+                ],
+                exclude: /node_modules/,
             },
             {
                 test: /\.css$/,

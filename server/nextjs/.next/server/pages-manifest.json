@@ -2,7 +2,5 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/api/search/keyword": "pages/api/search/keyword.js",
-  "/api/plugin/getProductPage": "pages/api/plugin/getProductPage.js",
-  "/api/plugin/list": "pages/api/plugin/list.js"
+  "/": "pages/index.js"
 }

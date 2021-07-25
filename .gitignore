@@ -10,7 +10,7 @@ server/nextjs/node_modules
 /coverage
 
 # next.js
-server/nextjs/.next/
+/server/nextjs/.next/
 server/nextjs/out/
 
 # production
@@ -32,3 +32,4 @@ yarn-error.log*
 
 
 *.tmp
+server/nextjs/.next

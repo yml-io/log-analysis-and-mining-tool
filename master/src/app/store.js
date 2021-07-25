@@ -6,6 +6,7 @@ import pluginReducer from '@/features/plugin';
 import searchStructureReducer from '@/features/search_structure';
 import buildProfileReducer from '@/features/build_profile';
 import activityBarReducer from '@/features/activity_bar';
+import statusBarReducer from '@/features/status_bar';
 
 export default configureStore({
     reducer: {
@@ -15,6 +16,7 @@ export default configureStore({
         plugin: pluginReducer,
         searchStructure: searchStructureReducer,
         activityBar: activityBarReducer,
+        statusBar: statusBarReducer,
     },
     // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
     devTools: process.env.NODE_ENV !== 'production',

@@ -28,9 +28,9 @@ YYYY-MM-DD HH:mm:ss.msec level [threadID] [FunctionName] - [Message]
 2. 提供插件扩展，可选择性的将需要的插件组成计算管道。提供插件的配置页面。
 3. 基于 elasticsearch，提供 keyword 查询
 4. 生成各资源文件的基于线程时序图。
-5. [TODO]  异步提交任务，异步状态查询。
-6. [TODO]  进度和性能测量数据查询接口。
-7. [TODO]  TypeScript 改写。 
+5. 支持 TypeScript。 
+6. [TODO]  状态查询。
+7. [TODO]  性能调优。
 8. [TODO]  命令面板。
 9. [TODO]  事件边界自学习（识别出 event），事件共现分析（识别出 scheduler），异常检测, 预测 
 

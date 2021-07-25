@@ -52,7 +52,7 @@ const indexing = async (root, keywords) => {
                         re_message = cap_group[5]
 
                         const newItem = {
-                            data: re_date,
+                            date: re_date,
                             level: re_level,
                             threadId: re_thread_id,
                             process: re_process,
