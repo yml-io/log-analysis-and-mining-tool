@@ -17,6 +17,8 @@ YYYY-MM-DD HH:mm:ss.msec level [threadID] [FunctionName] - [Message]
 
 # Snapshot
 
+![image0](./doc/image3.png)
+
 ![image1](./doc/image1.png)
 
 ![image2](./doc/image2.png)
@@ -28,7 +30,7 @@ YYYY-MM-DD HH:mm:ss.msec level [threadID] [FunctionName] - [Message]
 2. 提供插件扩展，可选择性的将需要的插件组成计算管道。提供插件的配置页面。
 3. 基于 elasticsearch，提供 keyword 查询
 4. 生成各资源文件的基于线程时序图。
-5. 支持 TypeScript。 
+5. [TODO]  TypeScript。 
 6. [TODO]  状态查询。
 7. [TODO]  性能调优。
 8. [TODO]  命令面板。
