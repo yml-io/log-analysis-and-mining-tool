@@ -17,7 +17,7 @@ YYYY-MM-DD HH:mm:ss.msec level [threadID] [FunctionName] - [Message]
 
 # Snapshot
 
-![image0](./doc/image3.png)
+![image0](./doc/image0.png)
 
 ![image1](./doc/image1.png)
 
