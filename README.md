@@ -1,6 +1,18 @@
 # 简介
-仿 VScode 界面的日志挖掘工具。提供将混合的多个结构化序列数据转化成并行事件序列的流程图结构。
-基于 React, reduxjs 1.6.0, material-ui, next.js 10.0.0.
+日志分析工具，可以将混合日志流分析出多个干净的日志流。
+# Features
+1. 支持多种序列资源类型。
+2. 提供插件扩展，可选择性的将需要的插件组成计算管道。提供插件的配置页面。
+3. 基于 elasticsearch，提供 keyword 查询
+4. 生成各资源文件的基于线程时序图。
+5. 提供类VSCode的操作界面。
+6. 支持多行日志格式。
+7. 前后端为JS全栈开发。
+8. [TODO]  TypeScript支持。 
+9. [TODO]  状态查询。
+10. [TODO]  命令面板功能富化。
+11. [TODO]  事件边界自学习（识别出 event），事件共现分析（识别出 scheduler），异常检测, 预测 
+
 
 # How to use
 处理的日志格式，需要形如  
@@ -14,6 +26,7 @@ YYYY-MM-DD HH:mm:ss.msec level [threadID] [FunctionName] - [Message]
 
 /(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{4}) (\w+) \[([^\]]+)\] (\w+) - (.*)$/
 ```
+自定义正则格式，待添加。
 
 # Snapshot
 
@@ -24,17 +37,6 @@ YYYY-MM-DD HH:mm:ss.msec level [threadID] [FunctionName] - [Message]
 ![image2](./doc/image2.png)
 
 ![image3](./doc/image3.png)
-
-# Features
-1. 支持多种序列资源类型。
-2. 提供插件扩展，可选择性的将需要的插件组成计算管道。提供插件的配置页面。
-3. 基于 elasticsearch，提供 keyword 查询
-4. 生成各资源文件的基于线程时序图。
-5. [TODO]  TypeScript。 
-6. [TODO]  状态查询。
-7. [TODO]  性能调优。
-8. [TODO]  命令面板。
-9. [TODO]  事件边界自学习（识别出 event），事件共现分析（识别出 scheduler），异常检测, 预测 
 
 
 # How to create a plugin
